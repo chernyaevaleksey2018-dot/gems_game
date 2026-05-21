@@ -17,9 +17,12 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(sfml)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} Source/main.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE sfml-graphics sfml-system sfml-window)
 
-target_include_directories(${PROJECT_NAME} PUBLIC src/public)
-target_sources(${PROJECT_NAME} PRIVATE src/private/source.cpp)
+target_include_directories(${PROJECT_NAME} PUBLIC Source/Public)
+target_sources(${PROJECT_NAME} PRIVATE 
+  Source/Private/Game.cpp
+  Source/Private/Board.cpp
+)
