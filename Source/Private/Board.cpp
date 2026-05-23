@@ -4,7 +4,8 @@
 #include <algorithm>
 #include <map>
 
-Board::Board() : m_Rng(static_cast<unsigned>(std::time(nullptr))) {
+Board::Board() : m_Rng(static_cast<unsigned>(std::time(nullptr))) 
+{
   Generate();
 }
 
@@ -18,7 +19,7 @@ void Board::Generate() {
 
       std::vector<GemColor> forbidden;
 
-      // Проверяем два квадрата слева
+      // проверка двух квадратов слева
       if (x >= 2 && m_Grid[y][x - 1].has_value() &&
           m_Grid[y][x - 2].has_value()) {
         if (m_Grid[y][x - 1]->color == m_Grid[y][x - 2]->color) {
@@ -26,7 +27,7 @@ void Board::Generate() {
         }
       }
 
-      // Проверяем два квадрата сверху
+      // проверка двух квадрата сверху
       if (y >= 2 && m_Grid[y - 1][x].has_value() &&
           m_Grid[y - 2][x].has_value()) {
         if (m_Grid[y - 1][x]->color == m_Grid[y - 2][x]->color) {
@@ -34,7 +35,7 @@ void Board::Generate() {
         }
       }
 
-      // Генерируем случайный цвет, избегая forbidden
+      // генерация случайного цвета
       Gem gem;
       do {
         gem = RandomGem();
@@ -165,7 +166,7 @@ bool Board::FindMatches() {
       m_Grid[y][x]->marked = true;
   };
 
-  // Горизонтальные линии >= 3
+  // горизонтальные линии >= 3
   for (int y = 0; y < Height; y++) {
     int x = 0;
     while (x < Width) {
@@ -183,7 +184,7 @@ bool Board::FindMatches() {
     }
   }
 
-  // Вертикальные линии >= 3
+  // вертикальыные линии >= 3
   for (int x = 0; x < Width; x++) {
     int y = 0;
     while (y < Height) {
@@ -201,7 +202,7 @@ bool Board::FindMatches() {
     }
   }
 
-  // Квадраты 2x2
+  // квадраты 2x2
   for (int y = 0; y < Height - 1; y++) {
     for (int x = 0; x < Width - 1; x++) {
       if (!m_Grid[y][x].has_value()) continue;
@@ -243,10 +244,9 @@ void Board::RemoveMatches() {
 }
 
 void Board::ApplyGravity() {
-    // Для каждого столбца: собираем все существующие гемы снизу вверх,
-    // затем расставляем их заподно к низу — пустые слоты остаются сверху.
+    // для каждого столбца: собираем все существующие гемы снизу вверх, затем расставляем их заподно к низу — пустые слоты остаются сверху
     for (int x = 0; x < Width; x++) {
-        // Собираем гемы снизу вверх (нижний первым)
+        // собираем гемы снизу вверх (нижний первым)
         std::vector<Gem> gems;
         for (int y = Height - 1; y >= 0; y--) {
             if (m_Grid[y][x].has_value()) {
@@ -254,7 +254,7 @@ void Board::ApplyGravity() {
             }
         }
 
-        // Расставляем: нижние строки заполняем имеющимися гемами
+        // расставляем: нижние строки заполняем имеющимися гемами
         for (int y = Height - 1; y >= 0; y--) {
             int idx = Height - 1 - y; // 0 = самый нижний слот
             if (idx < (int)gems.size()) {
@@ -271,9 +271,8 @@ void Board::ApplyGravity() {
 }
 
 void Board::FillEmpty() {
-    // Заполняем только пустые слоты (они всегда сверху после ApplyGravity).
-    // Спавним блоки за верхним краем экрана с разным смещением,
-    // чтобы блоки падали сверху по очереди.
+    // заполняем только пустые слоты 
+    // спавним блоки за верхним краем экрана с разным смещением, чтобы блоки падали сверху по очереди
     for (int x = 0; x < Width; x++) {
         int spawnOffset = 1;
         for (int y = 0; y < Height; y++) {
@@ -281,7 +280,7 @@ void Board::FillEmpty() {
                 m_Grid[y][x] = RandomGem();
                 auto& gem = *m_Grid[y][x];
 
-                // Спавним за экраном сверху, каждый следующий чуть выше
+                // спавним за экраном сверху, каждый следующий чуть выше
                 gem.visualPosition = {
                     static_cast<float>(x * TileSize),
                     -static_cast<float>(TileSize * spawnOffset)
@@ -361,11 +360,15 @@ void Board::ApplyRecolor(int x, int y, GemColor color) {
   }
 }
 
-void Board::StartDestroy() {
-  for (auto &row : m_Grid) {
-    for (auto &cell : row) {
+void Board::StartDestroy() 
+{
+  for (auto &row : m_Grid) 
+  {
+    for (auto &cell : row) 
+    {
 
-      if (cell.has_value() && cell->marked) {
+      if (cell.has_value() && cell->marked) 
+      {
         cell->destroyTimer = 1.f;
       }
     }
@@ -374,11 +377,15 @@ void Board::StartDestroy() {
   m_Animating = true;
 }
 
-bool Board::HasDestroyAnimation() const {
-  for (const auto &row : m_Grid) {
-    for (const auto &cell : row) {
+bool Board::HasDestroyAnimation() const 
+{
+  for (const auto &row : m_Grid) 
+  {
+    for (const auto &cell : row) 
+    {
 
-      if (cell.has_value() && cell->marked) {
+      if (cell.has_value() && cell->marked) 
+      {
         return true;
       }
     }
@@ -387,25 +394,21 @@ bool Board::HasDestroyAnimation() const {
   return false;
 }
 
-void Board::UpdateVisuals(float dt) {
-  for (auto &row : m_Grid) {
-    for (auto &cell : row) {
-
+void Board::UpdateVisuals(float dt) 
+{
+  for (auto &row : m_Grid) 
+  {
+    for (auto &cell : row) 
+    {
       if (!cell.has_value())
         continue;
 
       auto &gem = *cell;
 
-      gem.visualPosition.x =
-          Lerp(gem.visualPosition.x, gem.targetPosition.x, dt * 12.f);
+      gem.visualPosition.x = Lerp(gem.visualPosition.x, gem.targetPosition.x, dt * 12.f);
+      gem.visualPosition.y = Lerp(gem.visualPosition.y, gem.targetPosition.y, dt * 12.f);
 
-      gem.visualPosition.y =
-          Lerp(gem.visualPosition.y, gem.targetPosition.y, dt * 12.f);
-
-      if (gem.marked) {
-
-        gem.destroyTimer -= dt * 4.f;
-      }
+      if (gem.marked) { gem.destroyTimer -= dt * 4.f; }
     }
   }
 }
@@ -415,7 +418,7 @@ void Board::RemoveDestroyed() {
 
   struct BonusEvent { int x, y; GemColor color; };
 
-  // Группируем уничтожаемые блоки по цвету: для каждой группы — один бонус
+  // группируем уничтожаемые блоки по цвету: для каждой группы - один бонус
   std::map<GemColor, std::vector<std::pair<int,int>>> groups;
 
   for (int y = 0; y < Height; y++) {
@@ -427,7 +430,7 @@ void Board::RemoveDestroyed() {
     }
   }
 
-  // Удаляем все помеченные блоки
+  // удаляем все помеченные блоки
   for (int y = 0; y < Height; y++) {
     for (int x = 0; x < Width; x++) {
       if (m_Grid[y][x].has_value() && m_Grid[y][x]->marked)
@@ -435,7 +438,7 @@ void Board::RemoveDestroyed() {
     }
   }
 
-  // Для каждой группы одного цвета — с шансом 25% один бонус в случайной позиции группы
+  // для каждой группы одного цвета - с шансом 25% один бонус в случайной позиции группы
   std::vector<BonusEvent> bonuses;
   for (auto &[color, cells] : groups) {
     if (chance(m_Rng) < 0.25f) {
@@ -451,10 +454,10 @@ void Board::RemoveDestroyed() {
 }
 
 void Board::Update(float dt) {
-    // 1) Обновляем визуальные позиции всех гемов (плавное падение)
+    // 1) обновляем визуальные позиции всех гемов
     UpdateVisuals(dt);
 
-    // 2) Проверяем, если анимация разрушения активна
+    // 2) проверяем, если анимация разрушения активна
     if (m_Animating) {
         bool animStillPlaying = false;
 
@@ -468,17 +471,20 @@ void Board::Update(float dt) {
             if (animStillPlaying) break;
         }
 
-        // Если разрушение закончилось
+        // если разрушение закончилось
         if (!animStillPlaying) {
-            RemoveDestroyed();   // удаляем отмеченные гемы + применяем бонусы
-            ApplyGravity();      // падают квадраты
-            FillEmpty();         // сверху спавним новые
+            RemoveDestroyed(); // удаляем отмеченные гемы + применяем бонусы
+            ApplyGravity(); // падают квадраты
+            FillEmpty(); // сверху спавним новые
 
-            // Бомба могла пометить новые блоки — проверяем
+            // бомба могла пометить новые блоки, это надо проверить
             bool hasBombMarked = false;
-            for (auto& row : m_Grid) {
-                for (auto& cell : row) {
-                    if (cell.has_value() && cell->marked) {
+            for (auto& row : m_Grid) 
+            {
+                for (auto& cell : row) 
+                {
+                    if (cell.has_value() && cell->marked) 
+                    {
                         hasBombMarked = true;
                         break;
                     }
@@ -486,7 +492,8 @@ void Board::Update(float dt) {
                 if (hasBombMarked) break;
             }
 
-            if (hasBombMarked || FindMatches()) {
+            if (hasBombMarked || FindMatches()) 
+            {
                 StartDestroy();
             } else {
                 m_Animating = false;
