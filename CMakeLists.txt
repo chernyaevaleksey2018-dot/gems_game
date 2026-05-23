@@ -9,7 +9,7 @@ set(PROJECT_NAME SFMLGAME)
 
 project(${PROJECT_NAME} LANGUAGES C CXX)
 
-# Adding SFML
+# добавляем SFML через гит
 FetchContent_Declare(
   sfml 
   GIT_REPOSITORY "https://github.com/SFML/SFML.git"
