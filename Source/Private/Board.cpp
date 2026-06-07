@@ -136,8 +136,7 @@ bool Board::Swap(int x1, int y1, int x2, int y2) {
     if (!m_Grid[y][x].has_value())
       return;
 
-    m_Grid[y][x]->targetPosition = {static_cast<float>(x * TileSize),
-                                    static_cast<float>(y * TileSize)};
+    m_Grid[y][x]->targetPosition = {static_cast<float>(x * TileSize), static_cast<float>(y * TileSize)};
   };
 
   FixPosition(x1, y1);
@@ -162,8 +161,7 @@ bool Board::FindMatches() {
   bool found = false;
 
   auto markCell = [&](int x, int y) {
-    if (IsInside(x, y) && m_Grid[y][x].has_value())
-      m_Grid[y][x]->marked = true;
+    if (IsInside(x, y) && m_Grid[y][x].has_value()) m_Grid[y][x]->marked = true;
   };
 
   // горизонтальные линии >= 3
@@ -282,12 +280,10 @@ void Board::FillEmpty() {
 
                 // спавним за экраном сверху, каждый следующий чуть выше
                 gem.visualPosition = {
-                    static_cast<float>(x * TileSize),
-                    -static_cast<float>(TileSize * spawnOffset)
+                    static_cast<float>(x * TileSize), -static_cast<float>(TileSize * spawnOffset)
                 };
                 gem.targetPosition = {
-                    static_cast<float>(x * TileSize),
-                    static_cast<float>(y * TileSize)
+                    static_cast<float>(x * TileSize), static_cast<float>(y * TileSize)
                 };
                 spawnOffset++;
             }
